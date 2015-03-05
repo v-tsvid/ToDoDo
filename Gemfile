@@ -7,12 +7,12 @@ gem 'rails', '4.1.8'
 #gem 'pg'
 gem 'pg'
 group :development, :test do
-  gem 'rspec-rails', '2.13.1'
+  gem 'rspec-rails'
 end
 
 group :test do
-  gem 'selenium-webdriver', '2.35.1'
-  gem 'capybara', '2.1.0'
+  gem 'selenium-webdriver'
+  gem 'capybara'
 end
 
 # Use SCSS for stylesheets
@@ -37,8 +37,10 @@ group :doc do
 end
 
 group :production do
-  gem 'rails_12factor', '0.0.2'
+  gem 'rails_12factor'
 end
+
+gem 'minitest'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
