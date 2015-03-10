@@ -31,6 +31,7 @@ GEM
     autoprefixer-rails (5.1.7)
       execjs
       json
+    bcrypt (3.1.10-x86-mingw32)
     bootstrap-sass (3.3.3)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
@@ -219,7 +220,8 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  bootstrap-sass
+  bcrypt (= 3.1.10)
+  bootstrap-sass (= 3.3.3)
   capybara
   childprocess
   coffee-rails (~> 4.0.0)
@@ -228,7 +230,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   minitest
-  pg
+  pg (= 0.18.1)
   rails (= 4.1.8)
   rails_12factor
   rb-notifu

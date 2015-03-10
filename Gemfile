@@ -3,10 +3,11 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.8'
-gem 'bootstrap-sass'
+gem 'bootstrap-sass', '3.3.3'
+gem 'bcrypt', '3.1.10'
 # Use postgresql as the database for Active Record
 #gem 'pg'
-gem 'pg'
+gem 'pg', '0.18.1'
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec'
