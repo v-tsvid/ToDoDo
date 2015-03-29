@@ -47,6 +47,12 @@ describe "User pages" do
           end.to change(User, :count).by(-1)
         end
         it { should_not have_link('delete', href: user_path(admin)) }
+
+        describe "self-deletion" do
+          it "should not be able to delete himself" do
+            expect { Capybara.current_session.driver.delete user_path(admin) }.not_to change(User, :count)
+          end
+        end
       end
     end
   end
@@ -79,7 +85,7 @@ describe "User pages" do
         fill_in "Name",         with: "Example User"
         fill_in "Email",        with: "user@example.com"
         fill_in "Password",     with: "foobar"
-        fill_in "Confirmation", with: "foobar"
+        fill_in "Confirm Password", with: "foobar"
       end
 
       it "should create a user" do
@@ -97,9 +103,21 @@ describe "User pages" do
     end
 
     describe "after submission" do
+      before do 
+          fill_in "Name",         with: "Example User"
+          fill_in "Email",        with: "user@example.com"
+          fill_in "Password",     with: "foobar"
+          fill_in "Confirm Password", with: "foobar"
+      end
 
       describe "without information" do
-        before { click_button submit }
+        before do 
+          fill_in "Name",         with: ""
+          fill_in "Email",        with: ""
+          fill_in "Password",     with: ""
+          fill_in "Confirm Password", with: ""
+          click_button submit
+        end
 
         it { should have_title('Sign up') }
         it { should have_content('error') }
@@ -108,9 +126,6 @@ describe "User pages" do
       describe "with blank name" do
         before do 
           fill_in "Name",         with: ""
-          fill_in "Email",        with: "user@example.com"
-          fill_in "Password",     with: "foobar"
-          fill_in "Confirmation", with: "foobar"
           click_button submit
         end
 
@@ -120,10 +135,7 @@ describe "User pages" do
 
       describe "with blank email" do
         before do 
-          fill_in "Name",         with: "Example User"
           fill_in "Email",        with: ""
-          fill_in "Password",     with: "foobar"
-          fill_in "Confirmation", with: "foobar"
           click_button submit
         end
 
@@ -133,10 +145,7 @@ describe "User pages" do
 
       describe "with blank password" do
         before do 
-          fill_in "Name",         with: "Example User"
-          fill_in "Email",        with: "user@example.com"
           fill_in "Password",     with: ""
-          fill_in "Confirmation", with: "foobar"
           click_button submit
         end
 
@@ -146,10 +155,7 @@ describe "User pages" do
 
       describe "with invalid email" do
         before do 
-          fill_in "Name",         with: "Example User"
           fill_in "Email",        with: "userexamplecom"
-          fill_in "Password",     with: "foobar"
-          fill_in "Confirmation", with: "foobar"
           click_button submit
         end
 
@@ -159,10 +165,8 @@ describe "User pages" do
 
       describe "with too short password" do
         before do 
-          fill_in "Name",         with: "Example User"
-          fill_in "Email",        with: "user@example.com"
           fill_in "Password",     with: "fooba"
-          fill_in "Confirmation", with: "fooba"
+          fill_in "Confirm Password", with: "fooba"
           click_button submit
         end
 
@@ -172,10 +176,8 @@ describe "User pages" do
 
       describe "with confirmation not match password" do
         before do 
-          fill_in "Name",         with: "Example User"
-          fill_in "Email",        with: "user@example.com"
           fill_in "Password",     with: "foobar"
-          fill_in "Confirmation", with: "foobat"
+          fill_in "Confirm Password", with: "foobat"
           click_button submit
         end
 
@@ -219,6 +221,18 @@ describe "User pages" do
       it { should have_link('Sign out', href: signout_path) }
       specify { expect(user.reload.name).to  eq new_name }
       specify { expect(user.reload.email).to eq new_email }
+    end
+
+    describe "forbidden attributes", type: :request do
+      let(:params) do
+        { user: { admin: true, password: user.password,
+                  password_confirmation: user.password } }
+      end
+      before do
+        sign_in user, no_capybara: true
+        patch user_path(user), params
+      end
+      specify { expect(user.reload).not_to be_admin }
     end
   end
 end

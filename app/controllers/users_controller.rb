@@ -4,7 +4,11 @@ class UsersController < ApplicationController
   before_action :admin_user,     only: :destroy
 
   def new
-  	@user = User.new
+  	unless signed_in?
+      @user = User.new
+    else
+      redirect_to(root_url)
+    end
   end
 
   def index
@@ -39,8 +43,13 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User deleted."
+    @user = User.find(params[:id])
+    if current_user?(@user)
+      flash[:danger] = "You cannot delete yourself!"
+    else
+      @user.destroy
+      flash[:success] = "User deleted."
+    end
     redirect_to users_url
   end
 
