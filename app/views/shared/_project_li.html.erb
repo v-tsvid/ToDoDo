@@ -1,0 +1,11 @@
+<span class="title"><%= wrap(object.title) %></span>
+<span class="deadline">
+  Complete it in <%= time_ago_in_words(object.deadline) %>.
+</span>
+</span>
+<% if current_user?(object.user) %>
+  <%= link_to "edit", edit_project_path(object.id) %>
+  <%= link_to "delete", object, method: :delete,
+                                data: { confirm: "You sure?" },
+                                title: object.title %>
+<% end %>

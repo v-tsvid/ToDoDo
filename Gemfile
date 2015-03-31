@@ -13,6 +13,7 @@ gem 'bootstrap-will_paginate', '0.0.10'
 gem 'pg', '0.18.1'
 group :development, :test do
   gem 'rspec-rails', '3.2.1'
+  gem 'rspec-its', '1.2.0'
   gem 'guard-rspec', '4.5.0'
   gem 'spork-rails', '4.0.0'
   gem 'guard-spork', '2.1.0'
